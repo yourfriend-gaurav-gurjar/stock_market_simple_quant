@@ -9,8 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Loading the data and practicing with libraries
+
 ```{r}
+# Loading the data and practicing with libraries
 library(tidyquant)
 library(reshape2)
 library(xts)       # working with extensible time series
