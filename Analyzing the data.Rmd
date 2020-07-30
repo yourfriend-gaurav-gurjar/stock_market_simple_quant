@@ -25,20 +25,20 @@ library(corrplot)  # Visualize correlation plots
 
 ```
 
-Reading and Summarizing multiple "*.txt" files
+Read in Data
+
 ```{r}
-# 
+# update this file path to point toward appropriate folder on your computer
 cryptocurrencies_folder <- "./data/cryptocurrencies/"
 cryptocurrencies_folder_files_list <- list.files(path = cryptocurrencies_folder, pattern = "*.txt")
+# read in each .txt file in file_list and rbind them into a data frame called  
 cryptocurrencies_data <- do.call("rbind",
                                   lapply(cryptocurrencies_folder_files_list, 
                                          function(x)
                                          read.table(paste(cryptocurrencies_folder, x, sep = ''),
                                                           header = TRUE,
                                                           stringsAsFactors = FALSE)))
-
-View(cryptocurrencies_data)
-
+#View(cryptocurrencies_data)
 currencies_major_folder <- "./data/currencies/major/"
 currencies_major_folder_files_list <- list.files(path = currencies_major_folder, pattern = "*.txt")
 currencies_major_folder_data <- do.call("rbind",
@@ -48,7 +48,6 @@ currencies_major_folder_data <- do.call("rbind",
                                                       header = TRUE,
                                                       stringsAsFactors = FALSE)))
 #View(currencies_major_folder_data)
-
 currencies_other_folder <- "./data/currencies/other/"
 currencies_other_folder_files_list <- list.files(path = currencies_other_folder, pattern = "*.txt")
 currencies_other_folder_data <- do.call("rbind",
@@ -58,7 +57,6 @@ currencies_other_folder_data <- do.call("rbind",
                                                             header = TRUE,
                                                             stringsAsFactors = FALSE)))
 #View(currencies_other_folder_data)
-
 indices_folder <- "./data/indices/"
 indices_folder_files_list <- list.files(path = indices_folder, pattern = "*.txt")
 indices_folder_data <- do.call("rbind",
@@ -68,8 +66,6 @@ indices_folder_data <- do.call("rbind",
                                                    header = TRUE,
                                                    stringsAsFactors = FALSE)))
 #View(indices_folder_data)
-
-
 stooq_stocks_indices_folder <- "./data/stooq stocks indices/"
 stooq_stocks_indices_folder_files_list <- list.files(path = stooq_stocks_indices_folder, pattern = "*.txt")
 stooq_stocks_indices_folder_data <- do.call("rbind",
@@ -78,28 +74,50 @@ stooq_stocks_indices_folder_data <- do.call("rbind",
                                                      read.table(paste(stooq_stocks_indices_folder, x, sep =''),
                                                                 header = TRUE,
                                                                 stringsAsFactors = FALSE)))
-View(stooq_stocks_indices_folder_data)
+#View(stooq_stocks_indices_folder_data)
 ```
+
+# Clean Data
 
 ```{r}
-#clean.data <- function(df){
-#  df <- cbind(df, colsplit(df$ticker, ',', names = c('s1', 's2', 's3')))
-#  df$answer <- ifelse(str_count(df$ticker, 'A') == 2, 'A', 'B')
-#  df$correct <- ifelse(df$response == df$answer, 1, 0)
-#  df$reactionTime <- as.numeric(df$reactionTime)
-#  return(df)
-#}
+clean.data <- function(df){
+  df <- cbind(df,
+              colsplit(df$X.TICKER...PER...DATE...TIME...OPEN...HIGH...LOW...CLOSE...VOL...OPENINT.,
+                       ',',
+                       names = c('ticker', 'per', 'date', 'time', 'open', 'high', 'low', 'close', 'vol', 'openInt'))) %>% 
+        mutate(date = ymd(date),
+               time = as.numeric(time),
+               open = as.double(open),
+               high = as.double(high),
+               low = as.double(low),
+               close = as.double(close),
+               vol = as.numeric(vol),
+               openInt = as.numeric(openInt)) %>%
+        select(ticker, per, date, time, open, high, low, close, vol, openInt)
+  return(df)
+}
+
+cryptocurrencies_data <- clean.data(cryptocurrencies_data)
+currencies_major_folder_data <- clean.data(currencies_major_folder_data)
+currencies_other_folder_data <- clean.data(currencies_other_folder_data)
+indices_folder_data <- clean.data(indices_folder_data)
+stooq_stocks_indices_folder_data <- clean.data(stooq_stocks_indices_folder_data)
 ```
+
+
 
 ```{r}
-cryptocurrencies_data %>% str()
-currencies_major_folder_data %>% str()
-currencies_other_folder_data %>% str()
-#print(as_tibble(format.data.frame(cryptocurrencies_data)))
-#cryptocurrencies_data %>%
-#  group_by(X.TICKER...PER...DATE...TIME...OPEN...HIGH...LOW...CLOSE...VOL...OPENINT.,)
+#View(cryptocurrencies_data)
+#View(currencies_major_folder_data)
+#View(currencies_other_folder_data)
+#View(indices_folder_data)
+#View(stooq_stocks_indices_folder_data)
 ```
 
+
+```{r}
+
+```
 
 
 
