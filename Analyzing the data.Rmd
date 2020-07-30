@@ -11,7 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Loading the data and practicing with libraries
 ```{r}
-library(tidyquant) 
+library(tidyquant)
+library(reshape2)
 library(xts)       # working with extensible time series
 library(quantmod)  # get stock prices; useful stock analysis function
 library(rvest)     # web scraping
@@ -21,6 +22,7 @@ library(forcats)   # working with factors
 library(lubridate) # working with dates in tibbles / data frames
 library(plotly)    # Interactive plots
 library(corrplot)  # Visualize correlation plots
+
 ```
 
 Reading and Summarizing multiple "*.txt" files
@@ -56,4 +58,57 @@ currencies_other_folder_data <- do.call("rbind",
                                                             header = TRUE,
                                                             stringsAsFactors = FALSE)))
 #View(currencies_other_folder_data)
+
+indices_folder <- "./data/indices/"
+indices_folder_files_list <- list.files(path = indices_folder, pattern = "*.txt")
+indices_folder_data <- do.call("rbind",
+                               lapply(indices_folder_files_list,
+                                      function(x)
+                                        read.table(paste(indices_folder, x, sep = ''),
+                                                   header = TRUE,
+                                                   stringsAsFactors = FALSE)))
+#View(indices_folder_data)
+
+
+stooq_stocks_indices_folder <- "./data/stooq stocks indices/"
+stooq_stocks_indices_folder_files_list <- list.files(path = stooq_stocks_indices_folder, pattern = "*.txt")
+stooq_stocks_indices_folder_data <- do.call("rbind",
+                                            lapply(stooq_stocks_indices_folder_files_list,
+                                                   function(x)
+                                                     read.table(paste(stooq_stocks_indices_folder, x, sep =''),
+                                                                header = TRUE,
+                                                                stringsAsFactors = FALSE)))
+View(stooq_stocks_indices_folder_data)
 ```
+
+```{r}
+#clean.data <- function(df){
+#  df <- cbind(df, colsplit(df$ticker, ',', names = c('s1', 's2', 's3')))
+#  df$answer <- ifelse(str_count(df$ticker, 'A') == 2, 'A', 'B')
+#  df$correct <- ifelse(df$response == df$answer, 1, 0)
+#  df$reactionTime <- as.numeric(df$reactionTime)
+#  return(df)
+#}
+```
+
+```{r}
+cryptocurrencies_data %>% str()
+currencies_major_folder_data %>% str()
+currencies_other_folder_data %>% str()
+#print(as_tibble(format.data.frame(cryptocurrencies_data)))
+#cryptocurrencies_data %>%
+#  group_by(X.TICKER...PER...DATE...TIME...OPEN...HIGH...LOW...CLOSE...VOL...OPENINT.,)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
