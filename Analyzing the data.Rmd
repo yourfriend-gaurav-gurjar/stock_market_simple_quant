@@ -105,32 +105,46 @@ indices_folder_data <- clean.data(indices_folder_data)
 stooq_stocks_indices_folder_data <- clean.data(stooq_stocks_indices_folder_data)
 ```
 
-
+Calculation
 
 ```{r}
+cryptocurrencies_data <- cryptocurrencies_data %>%
+  mutate(high_less = high - low,
+         atr = ATR(cryptocurrencies_data[, c("high", "low", "close")], n = 14),
+         atrX1.5 = )
+
 #View(cryptocurrencies_data)
-#View(currencies_major_folder_data)
-#View(currencies_other_folder_data)
-#View(indices_folder_data)
-#View(stooq_stocks_indices_folder_data)
-```
 
-Structure of the datasets
+currencies_major_folder_data <- currencies_major_folder_data %>%
+  mutate(high_less =high - low,
+         atr = ATR(currencies_major_folder_data[, c("high", "low", "close")], n = 14))
+
+#View(currencies_major_folder_data)
+
+currencies_other_folder_data <- currencies_other_folder_data %>%
+  mutate(high_less =high - low,
+         atr = ATR(currencies_other_folder_data[, c("high", "low", "close")], n = 14))
+
+indices_folder_data <- indices_folder_data %>%
+  mutate(high_less =high - low,
+         atr = ATR(indices_folder_data[, c("high", "low", "close")], n = 14))
+
+stooq_stocks_indices_folder_data <- stooq_stocks_indices_folder_data %>%
+  mutate(high_less =high - low,
+         atr = ATR(stooq_stocks_indices_folder_data[, c("high", "low", "close")], n = 14))
+```
 
 ```{r}
-cryptocurrencies_data %>% str()
-currencies_major_folder_data %>% str()
-currencies_other_folder_data %>% str()
-indices_folder_data %>% str()
-stooq_stocks_indices_folder_data %>% str()
+View(cryptocurrencies_data)
+View(currencies_major_folder_data)
+View(currencies_other_folder_data)
+View(indices_folder_data)
+View(stooq_stocks_indices_folder_data)
 ```
 
-
-
-
-
-
-
+```{r}
+write.csv(cryptocurrencies_data, file = "./CSVs/cryptocurrencies_data.csv")
+```
 
 
 
