@@ -115,11 +115,15 @@ stooq_stocks_indices_folder_data <- clean.data(stooq_stocks_indices_folder_data)
 #View(stooq_stocks_indices_folder_data)
 ```
 
+Structure of the datasets
 
 ```{r}
-
+cryptocurrencies_data %>% str()
+currencies_major_folder_data %>% str()
+currencies_other_folder_data %>% str()
+indices_folder_data %>% str()
+stooq_stocks_indices_folder_data %>% str()
 ```
-
 
 
 
