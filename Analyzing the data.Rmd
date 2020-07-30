@@ -144,6 +144,11 @@ View(stooq_stocks_indices_folder_data)
 
 ```{r}
 write.csv(cryptocurrencies_data, file = "./CSVs/cryptocurrencies_data.csv")
+write.csv(currencies_major_folder_data, file = "./CSVs/currencies_major_folder_data.csv")
+write.csv(currencies_other_folder_data, file = "./CSVs/currencies_other_folder_data.csv")
+write.csv(indices_folder_data, file = "./CSVs/indices_folder_data.csv")
+write.csv(stooq_stocks_indices_folder_data, file = "./CSVs/stooq_stocks_indices_folder_data.csv")
+
 ```
 
 
