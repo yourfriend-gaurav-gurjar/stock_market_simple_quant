@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Loading the data and practicing with libraries
 library(tidyquant)
 library(reshape2)
+library(openxlsx)
 library(xts)       # working with extensible time series
 library(quantmod)  # get stock prices; useful stock analysis function
 library(rvest)     # web scraping
@@ -91,10 +92,8 @@ clean.data <- function(df){
                open = as.double(open),
                high = as.double(high),
                low = as.double(low),
-               close = as.double(close),
-               vol = as.numeric(vol),
-               openInt = as.numeric(openInt)) %>%
-        select(ticker, per, date, time, open, high, low, close, vol, openInt)
+               close = as.double(close)) %>%
+        select(ticker, date, open, high, low, close)
   return(df)
 }
 
@@ -108,30 +107,24 @@ stooq_stocks_indices_folder_data <- clean.data(stooq_stocks_indices_folder_data)
 Calculation
 
 ```{r}
-cryptocurrencies_data <- cryptocurrencies_data %>%
-  mutate(high_less = high - low,
-         atr = ATR(cryptocurrencies_data[, c("high", "low", "close")], n = 14),
-         atrX1.5 = )
+cryptocurrencies_data <- cryptocurrencies_data %>% 
+  mutate(atr = ATR(cryptocurrencies_data[, c("high", "low", "close")], n = 14)) 
 
 #View(cryptocurrencies_data)
 
 currencies_major_folder_data <- currencies_major_folder_data %>%
-  mutate(high_less =high - low,
-         atr = ATR(currencies_major_folder_data[, c("high", "low", "close")], n = 14))
+  mutate(atr = ATR(currencies_major_folder_data[, c("high", "low", "close")], n = 14))
 
 #View(currencies_major_folder_data)
 
 currencies_other_folder_data <- currencies_other_folder_data %>%
-  mutate(high_less =high - low,
-         atr = ATR(currencies_other_folder_data[, c("high", "low", "close")], n = 14))
+  mutate(atr = ATR(currencies_other_folder_data[, c("high", "low", "close")], n = 14))
 
 indices_folder_data <- indices_folder_data %>%
-  mutate(high_less =high - low,
-         atr = ATR(indices_folder_data[, c("high", "low", "close")], n = 14))
+  mutate(atr = ATR(indices_folder_data[, c("high", "low", "close")], n = 14))
 
 stooq_stocks_indices_folder_data <- stooq_stocks_indices_folder_data %>%
-  mutate(high_less =high - low,
-         atr = ATR(stooq_stocks_indices_folder_data[, c("high", "low", "close")], n = 14))
+  mutate(atr = ATR(stooq_stocks_indices_folder_data[, c("high", "low", "close")], n = 14))
 ```
 
 ```{r}
@@ -142,15 +135,49 @@ View(indices_folder_data)
 View(stooq_stocks_indices_folder_data)
 ```
 
+Converting to CSVs
+
 ```{r}
+#write.csv(cryptocurrencies_data, file = "./CSVs/cryptocurrencies_data.csv", row.names = FALSE)
+#write.csv(currencies_major_folder_data, file = "./CSVs/currencies_major_folder_data.csv")
+#write.csv(currencies_other_folder_data, file = "./CSVs/currencies_other_folder_data.csv")
+#write.csv(indices_folder_data, file = "./CSVs/indices_folder_data.csv")
+#write.csv(stooq_stocks_indices_folder_data, file = "./CSVs/stooq_stocks_indices_folder_data.csv")
+```
+
+Converting to XLSx
+Ticker wise Splitting the dataframes
+```{r}
+#ticker_wise_cryptocurrencies_data <- cryptocurrencies_data %>%
+#  split(f = cryptocurrencies_data$ticker)
+#ticker_wise_indices_folder_data <- indices_folder_data %>%
+#  split(f = indices_folder_data$ticker)
+#ticker_wise_stooq_stocks_indices_folder_data <- stooq_stocks_indices_folder_data %>%
+#  split(f = stooq_stocks_indices_folder_data$ticker)
+ticker_wise_currencies_major_folder_data <- currencies_major_folder_data %>%
+  split(f = currencies_major_folder_data$ticker)
+#View(ticker_wise_currencies_major_folder_data)
+ticker_wise_currencies_other_folder_data <- currencies_other_folder_data %>%
+  split(f = currencies_other_folder_data$ticker)
+View(ticker_wise_currencies_other_folder_data)
+
+write.xlsx(ticker_wise_currencies_major_folder_data, file = "./xlsx/ticker_wise_currencies_major_folder_data.xlsx")
+
+write.xlsx(ticker_wise_currencies_other_folder_data, file = "./xlsx/ticker_wise_currencies_other_folder_data.xlsx")
+
+write.xlsx(cryptocurrencies_data, file = "./xlsx/cryptocurrencies_data.xlsx")
+#write.xlsx(currencies_major_folder_data, file = "./xlsx/currencies_major_folder_data.xlsx")
+#write.xlsx(currencies_other_folder_data, file = "./xlsx/currencies_other_folder_data.xlsx")
+write.xlsx(indices_folder_data, file = "./xlsx/indices_folder_data.xlsx")
+write.xlsx(stooq_stocks_indices_folder_data, file = "./xlsx/stooq_stocks_indices_folder_data.xlsx")
+```
+
+```{r}
+#path = "./xlsx/currencies_other_folder_data.xlsx"
+#path %>% readxl::excel_sheets() %>% set_names() %>% purrr::map(Shee, path = path)
 write.csv(cryptocurrencies_data, file = "./CSVs/cryptocurrencies_data.csv")
 write.csv(currencies_major_folder_data, file = "./CSVs/currencies_major_folder_data.csv")
 write.csv(currencies_other_folder_data, file = "./CSVs/currencies_other_folder_data.csv")
 write.csv(indices_folder_data, file = "./CSVs/indices_folder_data.csv")
 write.csv(stooq_stocks_indices_folder_data, file = "./CSVs/stooq_stocks_indices_folder_data.csv")
-
 ```
-
-
-
-
